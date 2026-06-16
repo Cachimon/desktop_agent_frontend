@@ -1,0 +1,40 @@
+{
+  "name": "ai-desktop-agent",
+  "version": "1.0.0",
+  "description": "AI Desktop Agent - A local-first, extensible desktop AI assistant",
+  "main": "./out/main/index.js",
+  "author": "",
+  "license": "MIT",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "postinstall": "electron-builder install-app-deps",
+    "build:unpack": "npm run build && electron-builder --dir",
+    "build:win": "npm run build && electron-builder --win",
+    "build:mac": "npm run build && electron-builder --mac",
+    "build:linux": "npm run build && electron-builder --linux"
+  },
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.1",
+    "@electron-toolkit/utils": "^3.0.0",
+    "dompurify": "^3.2.4",
+    "highlight.js": "^11.11.1",
+    "markdown-it": "^14.1.0",
+    "pinia": "^3.0.0",
+    "pinia-plugin-persistedstate": "^4.2.0"
+  },
+  "devDependencies": {
+    "@electron-toolkit/tsconfig": "^1.0.1",
+    "@types/dompurify": "^3.2.0",
+    "@types/markdown-it": "^14.1.2",
+    "@vitejs/plugin-vue": "^5.2.3",
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "electron-vite": "^3.0.0",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.0",
+    "vue": "^3.5.13",
+    "vue-tsc": "^2.2.0"
+  }
+}
