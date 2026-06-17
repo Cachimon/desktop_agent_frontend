@@ -91,7 +91,7 @@ const emit = defineEmits<{
 }
 
 .conversation-delete:hover {
-  background: rgba(239, 68, 68, 0.1);
+  background: var(--color-danger-bg);
   color: var(--color-danger);
 }
 </style>

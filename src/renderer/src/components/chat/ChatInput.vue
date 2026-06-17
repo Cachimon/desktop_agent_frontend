@@ -171,7 +171,7 @@ function handleStop(): void {
   padding: 6px 12px;
   border-radius: var(--radius-md);
   color: var(--color-danger);
-  background: rgba(239, 68, 68, 0.1);
+  background: var(--color-danger-bg);
   font-size: 12px;
   font-weight: 500;
   transition: all var(--transition-fast);

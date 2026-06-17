@@ -1,4 +1,4 @@
-export type MessageRole = 'user' | 'assistant'
+export type MessageRole = 'user' | 'assistant' | 'system'
 
 export type MessageStatus = 'completed' | 'streaming' | 'interrupted'
 
@@ -10,4 +10,9 @@ export interface Message {
   createdAt: string
   status: MessageStatus
   interruptReason?: string
+}
+
+export interface ToolCall {
+  name: string
+  input: string
 }

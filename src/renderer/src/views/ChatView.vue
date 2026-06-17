@@ -1,18 +1,23 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import SideBar from '@/components/sidebar/SideBar.vue'
 import MessageList from '@/components/chat/MessageList.vue'
 import WelcomeScreen from '@/components/chat/WelcomeScreen.vue'
 import ChatInput from '@/components/chat/ChatInput.vue'
+import HITLConfirmDialog from '@/components/hitl/HITLConfirmDialog.vue'
 import { useConversationStore } from '@/stores/conversationStore'
 import { useChatStore } from '@/stores/chatStore'
 import { useAppStore } from '@/stores/appStore'
 import { useChat } from '@/composables/useChat'
+import { useHITL } from '@/composables/useHITL'
 
 const conversationStore = useConversationStore()
 const chatStore = useChatStore()
 const appStore = useAppStore()
 const { sendMessage, stopGeneration } = useChat()
+const { submitHITLDecision } = useHITL()
+
+const hitlErrorMessage = ref<string | null>(null)
 
 const sortedConversations = computed(() => conversationStore.getSortedConversations)
 const currentMessages = computed(() => chatStore.currentMessages)
@@ -43,6 +48,22 @@ function handleStop(): void {
   stopGeneration()
 }
 
+async function handleHITLApprove(): Promise<void> {
+  hitlErrorMessage.value = null
+  const error = await submitHITLDecision('approve')
+  if (error) {
+    hitlErrorMessage.value = error
+  }
+}
+
+async function handleHITLReject(): Promise<void> {
+  hitlErrorMessage.value = null
+  const error = await submitHITLDecision('reject')
+  if (error) {
+    hitlErrorMessage.value = error
+  }
+}
+
 onMounted(() => {
   if (conversationStore.conversations.length === 0) {
     conversationStore.createConversation()
@@ -70,6 +91,14 @@ onMounted(() => {
         @stop="handleStop"
       />
     </div>
+    <HITLConfirmDialog
+      :visible="chatStore.hitlPending"
+      :hitl-event="chatStore.hitlEvent"
+      :loading="false"
+      :error-message="hitlErrorMessage"
+      @approve="handleHITLApprove"
+      @reject="handleHITLReject"
+    />
   </div>
 </template>
 
@@ -78,6 +107,7 @@ onMounted(() => {
   display: flex;
   height: calc(100vh - var(--titlebar-height));
   overflow: hidden;
+  position: relative;
 }
 
 .chat-panel {

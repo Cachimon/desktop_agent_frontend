@@ -8,7 +8,7 @@ const ALLOWED_TAGS = [
 
 const ALLOWED_ATTR = ['href', 'target', 'rel', 'class', 'alt', 'src', 'title']
 
-const purifyConfig: DOMPurify.Config = {
+const purifyConfig = {
   ALLOWED_TAGS,
   ALLOWED_ATTR,
   FORBID_TAGS: ['script', 'iframe', 'form', 'object', 'embed', 'style'],
@@ -16,5 +16,5 @@ const purifyConfig: DOMPurify.Config = {
 }
 
 export function sanitizeHtml(html: string): string {
-  return DOMPurify.sanitize(html, purifyConfig)
+  return DOMPurify.sanitize(html, purifyConfig) as string
 }

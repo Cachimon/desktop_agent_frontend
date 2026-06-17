@@ -6,12 +6,17 @@ export const useAppStore = defineStore(
   'app',
   () => {
     const sidebarCollapsed = ref(false)
+    const backendHealthy = ref(true)
 
     function toggleSidebar(): void {
       sidebarCollapsed.value = !sidebarCollapsed.value
     }
 
-    return { sidebarCollapsed, toggleSidebar }
+    function setBackendHealthy(status: boolean): void {
+      backendHealthy.value = status
+    }
+
+    return { sidebarCollapsed, backendHealthy, toggleSidebar, setBackendHealthy }
   },
   {
     persist: {

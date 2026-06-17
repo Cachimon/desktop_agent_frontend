@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Message } from '@/types/message'
+import type { HITLEvent } from '@/types/hitl'
 import { generateUUID } from '@/utils/uuid'
 import { STORAGE_KEY_CHAT } from '@/constants'
 import { useConversationStore } from './conversationStore'
@@ -11,6 +12,9 @@ export const useChatStore = defineStore(
     const messages = ref<Record<string, Message[]>>({})
     const isStreaming = ref(false)
     const streamingMessageId = ref<string | null>(null)
+    const hitlPending = ref(false)
+    const hitlCheckpointId = ref<string | null>(null)
+    const hitlEvent = ref<HITLEvent | null>(null)
 
     const currentMessages = computed(() => {
       const convStore = useConversationStore()
@@ -92,6 +96,22 @@ export const useChatStore = defineStore(
       streamingMessageId.value = null
     }
 
+    function setHITLPending(event: HITLEvent): void {
+      hitlPending.value = true
+      hitlCheckpointId.value = event.checkpointId
+      hitlEvent.value = event
+    }
+
+    function clearHITLPending(): void {
+      hitlPending.value = false
+      hitlCheckpointId.value = null
+      hitlEvent.value = null
+    }
+
+    function loadMessagesFromBackend(conversationId: string, backendMessages: Message[]): void {
+      messages.value[conversationId] = backendMessages
+    }
+
     function clearMessages(conversationId: string): void {
       delete messages.value[conversationId]
     }
@@ -100,6 +120,9 @@ export const useChatStore = defineStore(
       messages,
       isStreaming,
       streamingMessageId,
+      hitlPending,
+      hitlCheckpointId,
+      hitlEvent,
       currentMessages,
       getMessagesByConversation,
       addUserMessage,
@@ -107,6 +130,9 @@ export const useChatStore = defineStore(
       appendAssistantContent,
       completeAssistantMessage,
       interruptAssistantMessage,
+      setHITLPending,
+      clearHITLPending,
+      loadMessagesFromBackend,
       clearMessages
     }
   },

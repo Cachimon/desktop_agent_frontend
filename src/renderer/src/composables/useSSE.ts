@@ -1,8 +1,9 @@
 import { onUnmounted } from 'vue'
 import { useChatStore } from '@/stores/chatStore'
 import { useConversationStore } from '@/stores/conversationStore'
-import { SSE_EVENT_TYPE_START, SSE_EVENT_TYPE_CONTENT, SSE_EVENT_TYPE_END } from '@/constants'
-import type { SSEEvent } from '@/types/sse'
+import { SSE_EVENT_TYPE_AI, SSE_EVENT_TYPE_TOOL, SSE_EVENT_TYPE_HUMAN, SSE_EVENT_TYPE_ERROR, SSE_EVENT_TYPE_END } from '@/constants'
+import type { V3SSEEvent, AIEventData, HumanEventData, ErrorEventData, EndEventData } from '@/types/sse'
+import type { HITLEvent } from '@/types/hitl'
 
 export function useSSE() {
   const chatStore = useChatStore()
@@ -10,20 +11,46 @@ export function useSSE() {
 
   let currentAssistantMessageId: string | null = null
 
-  function handleSSEEvent(event: SSEEvent): void {
+  function handleSSEEvent(event: V3SSEEvent): void {
     switch (event.type) {
-      case SSE_EVENT_TYPE_START: {
-        const convId = conversationStore.currentConversationId
-        if (convId) {
-          const msg = chatStore.createAssistantMessage(convId)
-          currentAssistantMessageId = msg.id
-          conversationStore.incrementMessageCount(convId)
+      case SSE_EVENT_TYPE_AI: {
+        if (!currentAssistantMessageId) {
+          const convId = conversationStore.currentConversationId
+          if (convId) {
+            const msg = chatStore.createAssistantMessage(convId)
+            currentAssistantMessageId = msg.id
+            conversationStore.incrementMessageCount(convId)
+          }
+        }
+        if (currentAssistantMessageId) {
+          const aiData = event.data as AIEventData
+          chatStore.appendAssistantContent(currentAssistantMessageId, aiData.content)
         }
         break
       }
-      case SSE_EVENT_TYPE_CONTENT: {
+      case SSE_EVENT_TYPE_TOOL: {
+        break
+      }
+      case SSE_EVENT_TYPE_HUMAN: {
+        const humanData = event.data as HumanEventData
+        const hitlEvent: HITLEvent = {
+          action: humanData.action,
+          message: humanData.message,
+          checkpointId: event.message_id || '',
+          conversationId: conversationStore.currentConversationId || ''
+        }
+        chatStore.setHITLPending(hitlEvent)
+        break
+      }
+      case SSE_EVENT_TYPE_ERROR: {
+        const errorData = event.data as ErrorEventData
         if (currentAssistantMessageId) {
-          chatStore.appendAssistantContent(currentAssistantMessageId, event.data)
+          chatStore.interruptAssistantMessage(currentAssistantMessageId, errorData.message || '连接异常')
+        }
+        if (errorData.code === 'TOKEN_EXPIRED') {
+          chatStore.isStreaming = false
+          currentAssistantMessageId = null
+          cleanup()
         }
         break
       }
@@ -40,21 +67,14 @@ export function useSSE() {
         break
       }
       default: {
-        if (event.type === 'error') {
-          if (currentAssistantMessageId) {
-            chatStore.interruptAssistantMessage(currentAssistantMessageId, event.data || '连接异常')
-          }
-          currentAssistantMessageId = null
-          cleanup()
-        }
         break
       }
     }
   }
 
-  function startStream(userInput: string): void {
+  function startStream(params: { conversation_id?: string; message: string; skill_hint?: string; stream_mode: string }): void {
     window.__ELECTRON_API__.onSSEEvent(handleSSEEvent)
-    window.__ELECTRON_API__.chatStream(userInput)
+    window.__ELECTRON_API__.chatStream(params)
   }
 
   function stopStream(): void {

@@ -17,8 +17,13 @@
   --color-border-light: #f0f0f0;
 
   --color-danger: #ef4444;
+  --color-danger-bg: rgba(239, 68, 68, 0.1);
   --color-success: #22c55e;
+  --color-success-bg: rgba(34, 197, 94, 0.1);
   --color-warning: #f59e0b;
+  --color-warning-bg: rgba(245, 158, 11, 0.1);
+  --color-info: #3b82f6;
+  --color-info-bg: rgba(59, 130, 246, 0.1);
 
   --sidebar-width: 260px;
   --sidebar-collapsed-width: 64px;
@@ -33,6 +38,7 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-modal: 0 20px 25px -5px rgba(0, 0, 0, 0.15);
 
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
     'Noto Sans SC', sans-serif;
@@ -41,4 +47,29 @@
 
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
+
+  --z-index-dropdown: 100;
+  --z-index-sticky: 200;
+  --z-index-drawer: 300;
+  --z-index-modal: 400;
+  --z-index-toast: 500;
+
+  --modal-overlay-bg: rgba(0, 0, 0, 0.5);
+  --drawer-overlay-bg: rgba(0, 0, 0, 0.3);
+
+  --login-container-max-width: 400px;
+  --health-card-gap: 16px;
 }
+
+/* @media (prefers-color-scheme: dark) {
+  Dark mode placeholder - not implemented in current phase
+  --color-primary: #818cf8;
+  --color-bg: #1a1a2e;
+  --color-bg-secondary: #252540;
+  --color-bg-tertiary: #2d2d4a;
+  --color-text: #e5e7eb;
+  --color-text-secondary: #9ca3af;
+  --color-text-tertiary: #6b7280;
+  --color-border: #374151;
+  --color-border-light: #2d2d4a;
+} */

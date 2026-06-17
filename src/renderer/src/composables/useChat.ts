@@ -9,8 +9,9 @@ export function useChat() {
   const conversationStore = useConversationStore()
   const { startStream, stopStream } = useSSE()
 
-  function sendMessage(content: string): string | null {
+  function sendMessage(content: string, skillHint?: string): string | null {
     if (isEmptyInput(content)) return null
+    if (chatStore.isStreaming) return null
 
     const validation = validateInput(content)
     if (!validation.valid) {
@@ -33,7 +34,12 @@ export function useChat() {
 
     conversationStore.updateConversationTimestamp(convId)
 
-    startStream(content.trim())
+    startStream({
+      conversation_id: convId,
+      message: content.trim(),
+      skill_hint: skillHint,
+      stream_mode: 'messages'
+    })
 
     return null
   }

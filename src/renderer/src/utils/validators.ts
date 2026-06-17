@@ -1,4 +1,4 @@
-import { MAX_INPUT_LENGTH } from '@/constants'
+import { MAX_INPUT_LENGTH, VERIFICATION_CODE_LENGTH } from '@/constants'
 
 export function validateInput(input: string): { valid: boolean; error?: string } {
   const trimmed = input.trim()
@@ -13,4 +13,18 @@ export function validateInput(input: string): { valid: boolean; error?: string }
 
 export function isEmptyInput(input: string): boolean {
   return input.trim().length === 0
+}
+
+export function isValidEmail(email: string): boolean {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email)
+}
+
+export function isValidVerificationCode(code: string): boolean {
+  const codeRegex = /^\d{6}$/
+  return codeRegex.test(code)
+}
+
+export function isValidWorkspacePath(path: string): boolean {
+  return path.trim().length > 0
 }

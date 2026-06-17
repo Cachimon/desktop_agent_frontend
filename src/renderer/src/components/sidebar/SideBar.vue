@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import ConversationList from './ConversationList.vue'
+import SkillList from '@/components/skills/SkillList.vue'
 import type { Conversation } from '@/types/conversation'
+import type { SkillMetadata } from '@/types/skill'
+import { useSkillStore } from '@/stores/skillStore'
 
 defineProps<{
   collapsed: boolean
@@ -13,7 +16,10 @@ const emit = defineEmits<{
   newConversation: []
   selectConversation: [id: string]
   deleteConversation: [id: string]
+  selectSkill: [name: string]
 }>()
+
+const skillStore = useSkillStore()
 </script>
 
 <template>
@@ -26,12 +32,20 @@ const emit = defineEmits<{
         <span v-if="!collapsed" class="new-chat-text">新建会话</span>
       </button>
     </div>
-    <ConversationList
-      :conversations="conversations"
-      :current-id="currentId"
-      @select="emit('selectConversation', $event)"
-      @delete="emit('deleteConversation', $event)"
-    />
+    <div class="sidebar-content">
+      <ConversationList
+        :conversations="conversations"
+        :current-id="currentId"
+        @select="emit('selectConversation', $event)"
+        @delete="emit('deleteConversation', $event)"
+      />
+      <SkillList
+        v-if="!collapsed"
+        :skills="skillStore.skills"
+        :loading="false"
+        @select="emit('selectSkill', $event)"
+      />
+    </div>
     <div class="sidebar-footer">
       <button class="toggle-btn" @click="emit('toggle')" :title="collapsed ? '展开侧边栏' : '折叠侧边栏'">
         <svg v-if="collapsed" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -90,6 +104,13 @@ const emit = defineEmits<{
 .new-chat-text {
   white-space: nowrap;
   overflow: hidden;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-footer {

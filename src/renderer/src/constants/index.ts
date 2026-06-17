@@ -1,8 +1,54 @@
-export { API_BASE_URL, API_PATH_CHAT_STREAM, API_PATH_CHAT_NON_STREAM } from '../../../shared/constants'
+export {
+  API_BASE_URL,
+  API_V1_PREFIX,
+  API_PATH_CHAT_STREAM,
+  API_PATH_CHAT_NON_STREAM,
+  API_PATH_HITL_CONFIRM,
+  API_PATH_CONVERSATIONS,
+  API_PATH_CONVERSATION_DETAIL,
+  API_PATH_SKILLS,
+  API_PATH_SKILL_DETAIL,
+  API_PATH_WORKSPACE,
+  API_PATH_HEALTH,
+  API_PATH_AUTH_SEND_CODE,
+  API_PATH_AUTH_LOGIN,
+  API_PATH_AUTH_REFRESH,
+  API_PATH_AUTH_LOGOUT,
+  API_PATH_AUTH_ME
+} from '../../../shared/constants'
 
-export const SSE_EVENT_TYPE_START = 'start'
-export const SSE_EVENT_TYPE_CONTENT = 'content'
+export {
+  IPC_CHANNEL_WINDOW_MINIMIZE,
+  IPC_CHANNEL_WINDOW_MAXIMIZE,
+  IPC_CHANNEL_WINDOW_CLOSE,
+  IPC_CHANNEL_APP_VERSION,
+  IPC_CHANNEL_CHAT_STREAM,
+  IPC_CHANNEL_CHAT_NON_STREAM,
+  IPC_CHANNEL_CHAT_STOP,
+  IPC_CHANNEL_SSE_EVENT,
+  IPC_CHANNEL_BEFORE_CLOSE,
+  IPC_CHANNEL_HITL_CONFIRM,
+  IPC_CHANNEL_AUTH_SEND_CODE,
+  IPC_CHANNEL_AUTH_LOGIN,
+  IPC_CHANNEL_AUTH_REFRESH,
+  IPC_CHANNEL_AUTH_LOGOUT,
+  IPC_CHANNEL_AUTH_ME,
+  IPC_CHANNEL_SKILL_LIST,
+  IPC_CHANNEL_SKILL_DETAIL,
+  IPC_CHANNEL_WORKSPACE_LIST,
+  IPC_CHANNEL_WORKSPACE_ADD,
+  IPC_CHANNEL_WORKSPACE_REMOVE,
+  IPC_CHANNEL_HEALTH_CHECK
+} from '../../../shared/constants'
+
+export const SSE_EVENT_TYPE_AI = 'ai'
+export const SSE_EVENT_TYPE_TOOL = 'tool'
+export const SSE_EVENT_TYPE_HUMAN = 'human'
+export const SSE_EVENT_TYPE_ERROR = 'error'
 export const SSE_EVENT_TYPE_END = 'end'
+
+export const HITL_DECISION_APPROVE = 'approve'
+export const HITL_DECISION_REJECT = 'reject'
 
 export const MAX_INPUT_LENGTH = 4096
 export const MAX_MESSAGE_CONTENT_LENGTH = 32768
@@ -13,17 +59,31 @@ export const CONVERSATION_TITLE_TRUNCATE_LENGTH = 20
 
 export const SSE_STREAM_TIMEOUT_MS = 60_000
 export const IPC_CALL_TIMEOUT_MS = 5_000
+export const VERIFICATION_CODE_COOLDOWN_MS = 60_000
+export const VERIFICATION_CODE_LENGTH = 6
+export const DEFAULT_WORKSPACE_CONFIRM_LEVEL = 'low'
 
 export const STORAGE_KEY_CONVERSATION = 'agent-conversation-store'
 export const STORAGE_KEY_CHAT = 'agent-chat-store'
 export const STORAGE_KEY_APP = 'agent-app-store'
+export const STORAGE_KEY_AUTH = 'agent-auth-store'
+export const STORAGE_KEY_SKILL = 'agent-skill-store'
+export const STORAGE_KEY_WORKSPACE = 'agent-workspace-store'
 
-export const IPC_CHANNEL_WINDOW_MINIMIZE = 'window:minimize'
-export const IPC_CHANNEL_WINDOW_MAXIMIZE = 'window:maximize'
-export const IPC_CHANNEL_WINDOW_CLOSE = 'window:close'
-export const IPC_CHANNEL_APP_VERSION = 'app:version'
-export const IPC_CHANNEL_CHAT_STREAM = 'chat:stream'
-export const IPC_CHANNEL_CHAT_NON_STREAM = 'chat:nonStream'
-export const IPC_CHANNEL_CHAT_STOP = 'chat:stop'
-export const IPC_CHANNEL_SSE_EVENT = 'sse:event'
-export const IPC_CHANNEL_BEFORE_CLOSE = 'window:before-close'
+export const TEXT_ERROR_CONNECTION_FAILED = '连接失败，请检查后端服务是否启动'
+export const TEXT_ERROR_RESPONSE_TIMEOUT = '响应超时，请稍后重试'
+export const TEXT_ERROR_RESPONSE_INTERRUPTED = '响应中断'
+export const TEXT_ERROR_BACKEND_UNREACHABLE = '后端服务不可达，请检查服务是否启动'
+export const TEXT_ERROR_SYSTEM_COMMUNICATION = '系统通信异常，请稍后重试'
+export const TEXT_ERROR_CHECKPOINT_NOT_FOUND = '确认点不存在，可能已过期'
+export const TEXT_ERROR_CHECKPOINT_EXPIRED = '确认点已过期，请重新发起操作'
+export const TEXT_ERROR_HITL_CONFLICT = '操作冲突，请稍后重试'
+export const TEXT_ERROR_CODE_INVALID = '验证码错误，请重新输入'
+export const TEXT_ERROR_CODE_EXPIRED = '验证码已失效，请重新获取'
+export const TEXT_ERROR_ACCOUNT_LOCKED = '账号已锁定，请稍后重试'
+export const TEXT_ERROR_RATE_LIMIT = '操作过于频繁，请稍后重试'
+export const TEXT_ERROR_PATH_FORBIDDEN = '路径访问被拒绝'
+export const TEXT_ERROR_WORKSPACE_EXISTS = '该工作区已存在'
+export const TEXT_LOGIN_EXPIRED = '登录已过期，请重新登录'
+export const TEXT_SUCCESS_CODE_SENT = '验证码已发送，请查收邮件'
+export const TEXT_HEALTH_CHECK_RETRY = '重试'
